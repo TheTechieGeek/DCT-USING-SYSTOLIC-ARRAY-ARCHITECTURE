@@ -1,13 +1,16 @@
 module tb_systolic_array_1d_dct;
 
+    parameter WIDTH = 16;
+    localparam RESULT_WIDTH = 2 * WIDTH;
+
     reg clk, rst;
-    reg signed [15:0] in_north0;
-    reg signed [15:0] in_west0, in_west1, in_west2, in_west3;
-    wire signed [31:0] result0, result1, result2, result3;
+    reg signed [WIDTH-1:0] in_north0;
+    reg signed [WIDTH-1:0] in_west0, in_west1, in_west2, in_west3;
+    wire signed [RESULT_WIDTH-1:0] result0, result1, result2, result3;
     wire done;
 
     // Instantiate the DUT
-    systolic_array_1d_dct uut (
+    systolic_array_1d_dct #(.WIDTH(WIDTH)) uut (
         .clk(clk),
         .rst(rst),
         .in_north0(in_north0),
@@ -36,12 +39,12 @@ module tb_systolic_array_1d_dct;
 
         // Initialize
         rst = 1;
-        in_north0 = 16'sd0;
-        in_west0 = 16'sd0; in_west1 = 16'sd0; in_west2 = 16'sd0; in_west3 = 16'sd0;
+        in_north0 = 0;
+        in_west0 = 0; in_west1 = 0; in_west2 = 0; in_west3 = 0;
 
         // Reset pulse
         #12;
-        rst = 16'sd0;
+        rst = 0;
 
         // === Cycle 1 ===
         @(posedge clk);
@@ -113,13 +116,12 @@ module tb_systolic_array_1d_dct;
 
         // Output result (Q15 scaled to floating point)
         $display("DCT Output (Q15):");
-        $display("Y0 = %0d.%03d", result0 / 32768, (abs(result0 % 32768) * 1000) / 32768);
-        $display("Y1 = %0d.%03d", result1 / 32768, (abs(result1 % 32768) * 1000) / 32768);
-        $display("Y2 = %0d.%03d", result2 / 32768, (abs(result2 % 32768) * 1000) / 32768);
-        $display("Y3 = %0d.%03d", result3 / 32768, (abs(result3 % 32768) * 1000) / 32768);
+        $display("Y0 = %0d.%03d", result0 / 32768, (result0 < 0 ? -result0 : result0) % 32768 * 1000 / 32768);
+        $display("Y1 = %0d.%03d", result1 / 32768, (result1 < 0 ? -result1 : result1) % 32768 * 1000 / 32768);
+        $display("Y2 = %0d.%03d", result2 / 32768, (result2 < 0 ? -result2 : result2) % 32768 * 1000 / 32768);
+        $display("Y3 = %0d.%03d", result3 / 32768, (result3 < 0 ? -result3 : result3) % 32768 * 1000 / 32768);
 
         $finish;
     end
 
 endmodule
-
