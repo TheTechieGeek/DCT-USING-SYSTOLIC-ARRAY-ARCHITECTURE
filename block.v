@@ -1,26 +1,29 @@
-module block(
-    input  signed [15:0] in_north,
-    input  signed [15:0] in_west,
+module block #(
+    parameter DATA_WIDTH = 16
+)(
+    input  signed [DATA_WIDTH-1:0] in_north,
+    input  signed [DATA_WIDTH-1:0] in_west,
     input  clk, rst,
-    output reg signed [15:0] out_south,
-    output reg signed [31:0] result
+    output reg signed [DATA_WIDTH-1:0] out_south,
+    output reg signed [(2*DATA_WIDTH)-1:0] result
 );
 
-    wire signed [31:0] multi;
+    // Intermediate multiplication (double width)
+    wire signed [(2*DATA_WIDTH)-1:0] multi;
     assign multi = in_north * in_west;
 
-    always @(posedge clk) begin
-      if (rst)
-        begin
-          result <= 0;
-          out_south <= 0;
-        end
-      else
-        begin
-          result <= result + multi;
-          out_south <= in_north;
-        end
-    end
-endmodule
+    always @(posedge clk) 
+      begin
+        if (rst) 
+          begin
+            result     <= 0;
+            out_south  <= 0;
+          end
+  		else 
+          begin
+            result     <= result + multi;
+            out_south  <= in_north;
+          end
+      end
 
-        
+endmodule
