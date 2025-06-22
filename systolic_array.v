@@ -2,21 +2,21 @@
 module systolic_array_1d_dct (
     input clk,	// clock
     input rst,	// reset value
-    input [31:0] in_north0,
-    input [31:0] in_west0,  // basis for PE0
-    input [31:0] in_west1,  // basis for PE1
-    input [31:0] in_west2,  // basis for PE2
-    input [31:0] in_west3,  // basis for PE3
+    input [15:0] in_north0,
+    input [15:0] in_west0,  // basis for PE0
+    input [15:0] in_west1,  // basis for PE1
+    input [15:0] in_west2,  // basis for PE2
+    input [15:0] in_west3,  // basis for PE3
 
-    output [63:0] result0,  // Y0
-    output [63:0] result1,  // Y1
-    output [63:0] result2,  // Y2
-    output [63:0] result3,  // Y3
+    output [31:0] result0,  // Y0
+    output [31:0] result1,  // Y1
+    output [31:0] result2,  // Y2
+    output [31:0] result3,  // Y3
     output reg done
 );
 
     // Internal wires to propagate data down
-    wire [31:0] out_south0, out_south1, out_south2;
+    wire [15:0] out_south0, out_south1, out_south2;
 
     // PE0: input from top, first basis coefficient
     block PE0 (
