@@ -1,12 +1,12 @@
 module block(
-    input  signed [31:0] in_north,
-    input  signed [31:0] in_west,
+    input  signed [15:0] in_north,
+    input  signed [15:0] in_west,
     input  clk, rst,
-    output reg signed [31:0] out_south,
-    output reg signed [63:0] result
+    output reg signed [15:0] out_south,
+    output reg signed [31:0] result
 );
 
-    wire signed [63:0] multi;
+    wire signed [31:0] multi;
     assign multi = in_north * in_west;
 
     always @(posedge clk) begin
@@ -22,3 +22,5 @@ module block(
         end
     end
 endmodule
+
+        
